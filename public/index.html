@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="de-CH">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#14181c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Tankbuch</title>
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/app.css">
+</head>
+<body>
+<div id="login" class="login" hidden>
+  <div class="login-card">
+    <img src="/icon-192.png" alt="" class="login-icon">
+    <h1>Tankbuch</h1>
+    <p class="muted">Betankungen erfassen, Verbrauch und Kosten im Blick.</p>
+    <a class="btn primary" href="/auth/login">Mit Google anmelden</a>
+    <p id="loginMsg" class="muted small"></p>
+  </div>
+</div>
+
+<div id="app" hidden>
+  <header class="top">
+    <select id="vehicleSel" aria-label="Fahrzeug"></select>
+    <button id="addBtn" class="btn primary round" aria-label="Betankung erfassen">+</button>
+  </header>
+
+  <main>
+    <section id="tab-fillups"></section>
+    <section id="tab-stats" hidden></section>
+    <section id="tab-vehicles" hidden></section>
+  </main>
+
+  <nav class="tabbar">
+    <button data-tab="fillups" class="active"><span class="ti">&#9981;</span>Betankungen</button>
+    <button data-tab="stats"><span class="ti">&#128200;&#xFE0E;</span>Statistik</button>
+    <button data-tab="vehicles"><span class="ti">&#9776;</span>Fahrzeuge</button>
+  </nav>
+</div>
+
+<dialog id="fillupDlg">
+  <form id="fillupForm" method="dialog" novalidate>
+    <h2 id="fillupTitle">Betankung</h2>
+    <div class="grid2">
+      <label>Datum<input type="date" name="date" required></label>
+      <label>Kilometerstand<input type="text" name="odometer" inputmode="decimal" required placeholder="km"></label>
+    </div>
+    <p id="odoHint" class="muted small"></p>
+    <div class="grid2">
+      <label>Menge (l)<input type="text" name="liters" inputmode="decimal" required></label>
+      <label>Währung<select name="currency"></select></label>
+    </div>
+    <div class="grid2">
+      <label>Preis pro Liter<input type="text" name="price_per_l" inputmode="decimal"></label>
+      <label>Betrag<input type="text" name="total" inputmode="decimal"></label>
+    </div>
+    <div id="fxBox" class="fx" hidden>
+      <p id="fxInfo" class="muted small"></p>
+      <label>Belasteter CHF-Betrag (optional, z.B. laut Kreditkarte)<input type="text" name="total_chf" inputmode="decimal" placeholder="automatisch zum Tageskurs"></label>
+    </div>
+    <label class="check"><input type="checkbox" name="full" checked> Vollgetankt</label>
+    <label class="check"><input type="checkbox" name="missed"> Eine Betankung davor wurde nicht erfasst</label>
+    <div class="grid2">
+      <label>Tankstelle / Ort<input type="text" name="station" maxlength="120"></label>
+      <label>Land<input type="text" name="country" maxlength="2" placeholder="CH"></label>
+    </div>
+    <label>Notiz<input type="text" name="note" maxlength="500"></label>
+    <p id="fillupErr" class="err"></p>
+    <div class="actions">
+      <button type="button" id="fillupDelete" class="btn danger" hidden>Löschen</button>
+      <span class="grow"></span>
+      <button type="button" class="btn" data-close>Abbrechen</button>
+      <button type="submit" class="btn primary">Speichern</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="vehicleDlg">
+  <form id="vehicleForm" method="dialog" novalidate>
+    <h2 id="vehicleTitle">Fahrzeug</h2>
+    <label>Bezeichnung<input type="text" name="name" required maxlength="80"></label>
+    <div class="grid2">
+      <label>Kontrollschild<input type="text" name="plate" maxlength="20"></label>
+      <label>Treibstoff<select name="fuel"></select></label>
+    </div>
+    <label>Tankvolumen (l, optional)<input type="text" name="tank_l" inputmode="decimal"></label>
+    <label>Notiz<input type="text" name="note" maxlength="500"></label>
+    <label class="check"><input type="checkbox" name="archived"> Archiviert (ausblenden)</label>
+    <p id="vehicleErr" class="err"></p>
+    <div class="actions">
+      <button type="button" id="vehicleDelete" class="btn danger" hidden>Löschen</button>
+      <span class="grow"></span>
+      <button type="button" class="btn" data-close>Abbrechen</button>
+      <button type="submit" class="btn primary">Speichern</button>
+    </div>
+  </form>
+</dialog>
+
+<div id="toast" class="toast" hidden></div>
+<script src="/app.js"></script>
+</body>
+</html>
